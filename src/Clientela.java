@@ -4,6 +4,10 @@ public class Clientela {
 
 	private ArrayList<Cliente> clientes;
 
+	public Clientela() {
+		this.clientes = new ArrayList<>();
+	}
+
 	public boolean cadastraCliente(Cliente cliente) {
 		String novoEmail = cliente.getEmail();
 		for (Cliente c : clientes) {
@@ -21,5 +25,9 @@ public class Clientela {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<Cliente> getClientes() {
+		return clientes;
 	}
 }

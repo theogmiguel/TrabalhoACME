@@ -4,7 +4,11 @@ public class CadastroEntregas {
 
 	private ArrayList<Entrega> entregas;
 
-	public boolean cadastraEntrega(Entrega entrega) {
+	public CadastroEntregas() {
+		entregas = new ArrayList<>();
+	}
+
+	public boolean novaEntrega(Entrega entrega) {
 		int novoCodigo = entrega.getCodigo();
 		for (Entrega e : entregas) {
 			if (novoCodigo == e.getCodigo()) {
@@ -33,4 +37,7 @@ public class CadastroEntregas {
 		return entregasAux;
 	}
 
+	public ArrayList<Entrega> getEntregas() {
+		return entregas;
+	}
 }
