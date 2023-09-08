@@ -5,13 +5,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class ACMEDelivery {
 
 	private Scanner entrada = null;                  // Atributo para entrada de dados
-	private PrintStream saidaPadrao = System.out;	 // 	Guarda a saida padrão - tela (console)
+	private PrintStream saidaPadrao = System.out;     // 	Guarda a saida padrão - tela (console)
 	private Clientela novaClientela;
 	private CadastroEntregas entregasPendentes;
 
@@ -33,11 +34,11 @@ public class ACMEDelivery {
 
 	public void executa() {
 		// 1
-		adicionarClientes();
+		cadastrarNovoClientes();
 		printarClientesCad();
 
 		// 2
-		adicionarEntregas();
+		cadastrarNovaEntregas();
 		printarEntregasCad();
 
 		// 3
@@ -51,10 +52,22 @@ public class ACMEDelivery {
 
 		// 6
 		procurarEntrega();
+
+		// 7
+		entregaClientDeterminado();
+
+		// 8
+		entregaMaiorValor();
+
+		// 9
+		mostrarEndEntrega();
+
+		// 10
+
 	}
 
 
-	private void adicionarClientes() {
+	private void cadastrarNovoClientes() {
 		String email = "";
 		String nome = "";
 		String endereco = "";
@@ -66,7 +79,8 @@ public class ACMEDelivery {
 				endereco = entrada.nextLine();
 
 				Cliente novoCliente = new Cliente(email, nome, endereco);
-				novaClientela.cadastraCliente(novoCliente);;
+				novaClientela.cadastraCliente(novoCliente);
+				;
 			}
 		} while (!email.equals("-1"));
 	}
@@ -77,7 +91,7 @@ public class ACMEDelivery {
 		}
 	}
 
-	private void adicionarEntregas() {
+	private void cadastrarNovaEntregas() {
 		int codigo = 0;
 		double preco = 0;
 		String descricao = "";
@@ -90,10 +104,11 @@ public class ACMEDelivery {
 				descricao = entrada.nextLine();
 				email = entrada.nextLine();
 
-				Cliente c = novaClientela.pesquisaCliente(email);
-				if (c != null) {
-					Entrega entrega = new Entrega(codigo, preco, descricao, c);
+				Cliente cliente = novaClientela.pesquisaCliente(email);
+				if (cliente != null) {
+					Entrega entrega = new Entrega(codigo, preco, descricao, cliente);
 					entregasPendentes.novaEntrega(entrega);
+					cliente.adicionaEntrega(entrega);
 				}
 			}
 		} while (codigo != -1);
@@ -101,7 +116,7 @@ public class ACMEDelivery {
 
 	private void printarEntregasCad() {
 		for (Entrega e : entregasPendentes.getEntregas()) {
-			System.out.println("2;" + e.getCodigo() + ";" + e.getValor() +  ";" + e.getDescricao() + "" + e.getCliente().getEmail());
+			System.out.println("2;" + e.getCodigo() + ";" + e.getValor() + ";" + e.getDescricao() + "" + e.getCliente().getEmail());
 		}
 	}
 
@@ -131,7 +146,68 @@ public class ACMEDelivery {
 		if (e != null) {
 			System.out.println("6;" + e.getCodigo() + ";" + e.getValor() + ";" + e.getDescricao() + ";" + e.getCliente().getEmail() + ";" + e.getCliente().getNome() + ";" + e.getCliente().getEndereco());
 		} else {
-			System.out.println("6;Cliente inexistente");
+			System.out.println("6;Entrega inexistente");
+		}
+	}
+
+	private void entregaClientDeterminado() {
+		String email = entrada.nextLine();
+
+		Cliente c = novaClientela.pesquisaCliente(email);
+		if (c != null) {
+			for (Entrega e : c.getEntregas()) {
+				System.out.println("7;" + email + ";" + e.getCodigo() + ";" + e.getCodigo() + ";" + e.getValor() + ";" + e.getDescricao());
+			}
+		} else {
+			System.out.println("7;Cliente inexistente");
+		}
+	}
+
+	private void entregaMaiorValor() {
+		if (entregasPendentes.getEntregas().size() == 0) {
+			System.out.println("8;Entrega inexistente");
+		} else {
+			ArrayList<Entrega> entregas = entregasPendentes.getEntregas();
+			double maiorValor = 0;
+			Entrega entregaMaior = null;
+			for (int i = 0; i < entregas.size(); i++) {
+				if (i == 0) {
+					entregaMaior = entregas.get(i);
+					maiorValor = entregas.get(i).getValor();
+				} else {
+					if (maiorValor < entregas.get(i).getValor()) {
+						entregaMaior = entregas.get(i);
+						maiorValor = entregas.get(i).getValor();
+					}
+				}
+			}
+			System.out.println("8;" + entregaMaior.getCodigo() + ";" + entregaMaior.getValor() + ";" + entregaMaior.getDescricao());
+		}
+	}
+
+	private void mostrarEndEntrega() {
+		int codigo = entrada.nextInt();
+
+		Entrega e = entregasPendentes.pesquisaEntrega(codigo);
+		if (e != null) {
+			System.out.println("9;" + e.getCodigo() + ";" + e.getValor() +  ";" + e.getDescricao() + ";" + e.getCliente().getEndereco());
+		} else {
+			System.out.println("9;Entrega inexistente");
+		}
+	}
+
+	private void somatorioValorCliente() {
+		String email = entrada.nextLine();
+
+		Cliente c = novaClientela.pesquisaCliente(email);
+		double valor = 0;
+		if (c != null) {
+			for (Entrega e : c.getEntregas()) {
+				valor += e.getValor();
+			}
+			System.out.println("10;" + c.getEmail() + ";" + c.getNome() + ";" + valor);
+		} else {
+			System.out.println("10;Cliente inexistente");
 		}
 	}
 }

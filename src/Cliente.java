@@ -6,7 +6,6 @@ public class Cliente {
 	private String endereco;
 	private ArrayList<Entrega> entregas;
 
-
 	public Cliente(String email, String nome, String endereco) {
 		this.email = email;
 		this.nome = nome;
@@ -18,7 +17,7 @@ public class Cliente {
 		return entregas.add(entrega);
 	}
 
-	public ArrayList<Entrega> pesquisaEntregas() {
+	public ArrayList<Entrega> getEntregas() {
 		return entregas;
 	}
 
