@@ -13,6 +13,9 @@ public class Cliente {
 		entregas = new ArrayList<>();
 	}
 
+	/**
+	 * Adiciona uma nova entrega ao cliente.
+	 */
 	public boolean adicionaEntrega(Entrega entrega) {
 		return entregas.add(entrega);
 	}

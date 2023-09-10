@@ -63,10 +63,12 @@ public class ACMEDelivery {
 		mostrarEndEntrega();
 
 		// 10
-
+		somatorioValorCliente();
 	}
 
-
+	/**
+	 * 1) Cadastra clientes printa usando a outra classe "printarClientesCad".
+	 */
 	private void cadastrarNovoClientes() {
 		String email = "";
 		String nome = "";
@@ -84,13 +86,15 @@ public class ACMEDelivery {
 			}
 		} while (!email.equals("-1"));
 	}
-
 	private void printarClientesCad() {
 		for (Cliente c : novaClientela.getClientes()) {
 			System.out.println("1;" + c.getEmail() + ";" + c.getNome() + ";" + c.getEndereco());
 		}
 	}
 
+	/**
+	 * 2) Cadastra entregas e printa usando a outra classe "printarEntregasCad".
+	 */
 	private void cadastrarNovaEntregas() {
 		int codigo = 0;
 		double preco = 0;
@@ -113,21 +117,29 @@ public class ACMEDelivery {
 			}
 		} while (codigo != -1);
 	}
-
 	private void printarEntregasCad() {
 		for (Entrega e : entregasPendentes.getEntregas()) {
 			System.out.println("2;" + e.getCodigo() + ";" + e.getValor() + ";" + e.getDescricao() + "" + e.getCliente().getEmail());
 		}
 	}
 
+	/**
+	 * 3) Mostra quantos clientes foram cadastrados.
+	 */
 	private void mostrarClientesCad() {
 		System.out.println("3;" + novaClientela.getClientes().size());
 	}
 
+	/**
+	 * 4) Mostra quantas entregas foram cadastradas.
+	 */
 	private void mostrarEntregasCad() {
 		System.out.println("4;" + entregasPendentes.getEntregas().size());
 	}
 
+	/**
+	 * 5) Mostra os dados de um determinado cliente.
+	 */
 	private void procurarCliente() {
 		String email = entrada.nextLine();
 
@@ -139,6 +151,9 @@ public class ACMEDelivery {
 		}
 	}
 
+	/**
+	 * 6) Mostra os dados de uma determinada entrega.
+	 */
 	private void procurarEntrega() {
 		int codigo = Integer.parseInt(entrada.nextLine());
 
@@ -150,6 +165,9 @@ public class ACMEDelivery {
 		}
 	}
 
+	/**
+	 * 7) Mostra os dados das entregas de um determinado cliente.
+	 */
 	private void entregaClientDeterminado() {
 		String email = entrada.nextLine();
 
@@ -163,6 +181,9 @@ public class ACMEDelivery {
 		}
 	}
 
+	/**
+	 * 8) Mostra os dados da entrega de maior valor.
+	 */
 	private void entregaMaiorValor() {
 		if (entregasPendentes.getEntregas().size() == 0) {
 			System.out.println("8;Entrega inexistente");
@@ -185,6 +206,9 @@ public class ACMEDelivery {
 		}
 	}
 
+	/**
+	 * 9) Mostra o endereço de uma determinada entrega.
+	 */
 	private void mostrarEndEntrega() {
 		int codigo = entrada.nextInt();
 
@@ -196,8 +220,11 @@ public class ACMEDelivery {
 		}
 	}
 
+	/**
+	 * 10) Mostra o somatório de valores de entregas de determinado cliente.
+	 */
 	private void somatorioValorCliente() {
-		String email = entrada.nextLine();
+		String email = entrada.next();
 
 		Cliente c = novaClientela.pesquisaCliente(email);
 		double valor = 0;
@@ -205,7 +232,7 @@ public class ACMEDelivery {
 			for (Entrega e : c.getEntregas()) {
 				valor += e.getValor();
 			}
-			System.out.println("10;" + c.getEmail() + ";" + c.getNome() + ";" + valor);
+			System.out.printf("10;%s;%s;%.2f", c.getEmail(), c.getNome(), valor);
 		} else {
 			System.out.println("10;Cliente inexistente");
 		}
